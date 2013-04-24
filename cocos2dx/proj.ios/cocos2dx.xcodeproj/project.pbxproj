@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0107711D172751000000C33D /* CCFontDefinition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01077117172751000000C33D /* CCFontDefinition.cpp */; };
+		0107711E172751000000C33D /* CCFontDefinition.h in Headers */ = {isa = PBXBuildFile; fileRef = 01077118172751000000C33D /* CCFontDefinition.h */; };
+		0107711F172751000000C33D /* CCStringTTF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 01077119172751000000C33D /* CCStringTTF.cpp */; };
+		01077120172751000000C33D /* CCStringTTF.h in Headers */ = {isa = PBXBuildFile; fileRef = 0107711A172751000000C33D /* CCStringTTF.h */; };
+		0107712417275D8C0000C33D /* CCTextImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 0107712317275D8C0000C33D /* CCTextImage.h */; };
+		0107712617275D980000C33D /* CCTextImage.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0107712517275D980000C33D /* CCTextImage.mm */; };
 		154269DC15B5653000712A7F /* CCNotificationCenter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 154269DA15B5653000712A7F /* CCNotificationCenter.cpp */; };
 		154269DD15B5653000712A7F /* CCNotificationCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 154269DB15B5653000712A7F /* CCNotificationCenter.h */; };
 		1551A343158F2AB200E66CFE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1551A342158F2AB200E66CFE /* Foundation.framework */; };
@@ -311,6 +317,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01077117172751000000C33D /* CCFontDefinition.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCFontDefinition.cpp; sourceTree = "<group>"; };
+		01077118172751000000C33D /* CCFontDefinition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCFontDefinition.h; sourceTree = "<group>"; };
+		01077119172751000000C33D /* CCStringTTF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCStringTTF.cpp; sourceTree = "<group>"; };
+		0107711A172751000000C33D /* CCStringTTF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCStringTTF.h; sourceTree = "<group>"; };
+		0107712317275D8C0000C33D /* CCTextImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCTextImage.h; sourceTree = "<group>"; };
+		0107712517275D980000C33D /* CCTextImage.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CCTextImage.mm; sourceTree = "<group>"; };
 		154269DA15B5653000712A7F /* CCNotificationCenter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCNotificationCenter.cpp; sourceTree = "<group>"; };
 		154269DB15B5653000712A7F /* CCNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCNotificationCenter.h; sourceTree = "<group>"; };
 		1551A33F158F2AB200E66CFE /* libcocos2dx.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libcocos2dx.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -888,6 +900,10 @@
 		1551A418158F2ADE00E66CFE /* label_nodes */ = {
 			isa = PBXGroup;
 			children = (
+				01077117172751000000C33D /* CCFontDefinition.cpp */,
+				01077118172751000000C33D /* CCFontDefinition.h */,
+				01077119172751000000C33D /* CCStringTTF.cpp */,
+				0107711A172751000000C33D /* CCStringTTF.h */,
 				1551A419158F2ADE00E66CFE /* CCLabelAtlas.cpp */,
 				1551A41A158F2ADE00E66CFE /* CCLabelAtlas.h */,
 				1551A41B158F2ADE00E66CFE /* CCLabelBMFont.cpp */,
@@ -959,6 +975,7 @@
 		1551A43F158F2ADE00E66CFE /* platform */ = {
 			isa = PBXGroup;
 			children = (
+				0107712317275D8C0000C33D /* CCTextImage.h */,
 				1551A46C158F2ADE00E66CFE /* CCAccelerometerDelegate.h */,
 				1551A46D158F2ADE00E66CFE /* CCApplicationProtocol.h */,
 				1551A46E158F2ADE00E66CFE /* CCCommon.h */,
@@ -1009,6 +1026,7 @@
 				1551A48F158F2ADE00E66CFE /* CCPlatformDefine.h */,
 				1551A490158F2ADE00E66CFE /* CCStdC.h */,
 				1551A491158F2ADE00E66CFE /* CCThread.mm */,
+				0107712517275D980000C33D /* CCTextImage.mm */,
 				1551A492158F2ADE00E66CFE /* EAGLView.h */,
 				1551A493158F2ADE00E66CFE /* EAGLView.mm */,
 				1551A4A0158F2ADE00E66CFE /* OpenGL_Internal.h */,
@@ -1437,6 +1455,9 @@
 				1A5B48EA16F084CC008568FC /* CCBool.h in Headers */,
 				1A5B48EB16F084CC008568FC /* CCDouble.h in Headers */,
 				1A5B48EC16F084CC008568FC /* CCFloat.h in Headers */,
+				0107711E172751000000C33D /* CCFontDefinition.h in Headers */,
+				01077120172751000000C33D /* CCStringTTF.h in Headers */,
+				0107712417275D8C0000C33D /* CCTextImage.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1621,6 +1642,9 @@
 				46A393F616E5D01B00210B16 /* CCUserDefault.cpp in Sources */,
 				46A393F816E5D01B00210B16 /* CCUserDefault.mm in Sources */,
 				46A393F916E5D01B00210B16 /* CCUserDefaultAndroid.cpp in Sources */,
+				0107711D172751000000C33D /* CCFontDefinition.cpp in Sources */,
+				0107711F172751000000C33D /* CCStringTTF.cpp in Sources */,
+				0107712617275D980000C33D /* CCTextImage.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

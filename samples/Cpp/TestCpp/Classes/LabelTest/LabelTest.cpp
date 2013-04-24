@@ -1555,3 +1555,23 @@ void LabelBMFontBounds::draw()
     ccDrawPoly(vertices, 4, true);
 }
 
+
+DynamicTTFDemo::DynamicTTFDemo()
+{
+}
+
+DynamicTTFDemo::~DynamicTTFDemo()
+{
+}
+
+string DynamicTTFDemo::title()
+{
+    return "Testing dynamic TTF labels";
+}
+
+std::string DynamicTTFDemo::subtitle()
+{
+    return "";
+}
+
+
