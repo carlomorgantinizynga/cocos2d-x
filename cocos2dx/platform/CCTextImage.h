@@ -26,7 +26,12 @@
 #ifndef TestNewStringStuff_CCTextImage_h
 #define TestNewStringStuff_CCTextImage_h
 
-#include "cocos2d.h"
+#include <map>
+#include <vector>
+
+#include "cocoa/CCGeometry.h"
+#include "textures/CCTexture2D.h"
+
 
 
 /** @brief CCGlyphDef defines one single glyph (character) in a text image 

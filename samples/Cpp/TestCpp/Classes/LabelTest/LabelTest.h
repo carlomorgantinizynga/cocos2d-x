@@ -307,27 +307,19 @@ private:
 class DynamicTTFDemo : public AtlasDemo
 {
 public:
+
     DynamicTTFDemo();
     virtual ~DynamicTTFDemo();
     virtual std::string title();
     virtual std::string subtitle();
+
 private:
-    /*
-    void  setAlignmentLeft(CCObject* pSender);
-    void  setAlignmentCenter(CCObject* pSender);
-    void  setAlignmentRight(CCObject* pSender);
-    void  setAlignmentTop(CCObject* pSender);
-    void  setAlignmentMiddle(CCObject* pSender);
-    void  setAlignmentBottom(CCObject* pSender);
-    void  updateAlignment();
-    const char* getCurrentAlignment();
-     */
-private:
-    /*
-    CCLabelTTF* m_plabel;
-    CCTextAlignment m_eHorizAlign;
-    CCVerticalTextAlignment m_eVertAlign;
-    */
+    
+    CCStringTTF *pTestString;
+    CCStringTTF *pTestString2;
+    CCStringTTF *pTestString3;
+    CCStringTTF *pTestString4;
+    
 };
 
 

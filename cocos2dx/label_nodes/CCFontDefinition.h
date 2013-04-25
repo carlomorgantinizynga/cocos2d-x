@@ -26,14 +26,20 @@
 #ifndef __TestNewStringStuff__CCFontDefinition__
 #define __TestNewStringStuff__CCFontDefinition__
 
+#include <map>
 
-
+#include "textures/CCTexture2D.h"
 #include <CoreText/CTFont.h>
 #include <CoreText/CTTypesetter.h>
 #include <CoreFoundation/CoreFoundation.h>
 
-#include "cocos2d.h"
-#include "CCTextImage.h"
+
+
+// this must be moved somewhere else
+#include "platform/CCtextImage.h"
+
+
+//#include "CCTextImage.h"
 
 struct CCLetterDefinition
 {

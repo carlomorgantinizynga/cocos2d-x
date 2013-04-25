@@ -28,6 +28,9 @@
 
 #include "CCFontDefinition.h"
 
+#include "base_nodes/CCNode.h"
+#include "sprite_nodes/CCSprite.h"
+
 class CCStringTTF : public cocos2d::CCNode
 {
 public:

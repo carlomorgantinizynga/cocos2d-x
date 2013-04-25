@@ -6,6 +6,7 @@
 //
 //
 
+#include "CCSpriteFrame.h"
 #include "CCStringTTF.h"
 
 using namespace cocos2d;

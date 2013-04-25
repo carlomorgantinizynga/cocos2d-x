@@ -59,7 +59,7 @@ bool CCFontDefinition::CreateFontDefinition(char *fontName, int fontSize, char *
         return false;
     
     mpTextImages->initWithString(letters, textureSize, textureSize, fontName, fontSize);
-    // debug mpTextImages->debugSaveToFile("grande.png", false);
+    mpTextImages->debugSaveToFile("grande.png", false);
     
     // get all the pages
     CCTextFontPages *pPages = mpTextImages->getPages();

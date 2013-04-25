@@ -1,6 +1,12 @@
 #include "LabelTest.h"
 #include "../testResource.h"
 
+
+
+// new Carlo stuff
+//#include "CCFontDefinition.h"
+
+
 enum {
     kTagTileMap = 1,
     kTagSpriteManager = 1,
@@ -40,7 +46,7 @@ CCLayer* restartAtlasAction();
 
 static int sceneIdx = -1; 
 
-#define MAX_LAYER    27
+#define MAX_LAYER    28
 
 CCLayer* createAtlasLayer(int nIndex)
 {
@@ -75,6 +81,7 @@ CCLayer* createAtlasLayer(int nIndex)
         case 24: return new Issue1343();
         case 25: return new LabelTTFAlignment();
         case 26: return new LabelBMFontBounds();
+        case 27: return new DynamicTTFDemo();
     }
 
     return NULL;
@@ -1558,6 +1565,78 @@ void LabelBMFontBounds::draw()
 
 DynamicTTFDemo::DynamicTTFDemo()
 {
+    CCSize s = CCDirector::sharedDirector()->getWinSize();
+    
+    
+    /*
+    CCLabelBMFont* bmFont = new CCLabelBMFont();
+    bmFont->init();
+    bmFont->autorelease();
+    bmFont->setFntFile("fonts/helvetica-32.fnt");
+    bmFont->setString("It is working!");
+    this->addChild(bmFont);
+    bmFont->setPosition(ccp(s.width/2,s.height/4*2));
+    */
+    
+    
+    const char *pFontName     = "SnellRoundhand";
+    const char *pFontName2    = "MarkerFelt-Wide";
+    const char *pFontName3    = "AmericanTypewriter";
+    
+    const char *pFontGlyphs   = "abcdefghilmnopqrstuvzxywABCDEFGHILMNOPQRSTUVZXYW0123456789,.";
+
+    const char *pFirstString   = "0";
+    //const char *pSecondString  = "Hello World, new TTF label";
+    const char *pSecondString  = "a";
+    const char *pSecondStringO = "Hello World, old TTF label";
+    
+    
+    // fonts definitions
+    CCFontDefinition *pDef = new CCFontDefinition;
+    pDef->CreateFontDefinition((char *)pFontName, 50, (char *) pFontGlyphs);
+    
+    
+    /*
+    CCFontDefinition *pDef2 = new CCFontDefinition;
+    pDef2->CreateFontDefinition((char *)pFontName2, 20, (char *) pFontGlyphs);
+    
+    CCFontDefinition *pDef3 = new CCFontDefinition;
+    pDef3->CreateFontDefinition((char *)pFontName3, 10, (char *) pFontGlyphs);
+    */
+    
+    // first label
+    pTestString = new CCStringTTF(pDef);
+    pTestString->setText((char *)pSecondString);
+    
+    this->addChild(pTestString);
+    pTestString->setPosition(CCPoint(100.0f, 300.0f));
+    
+    /*
+    // second label
+    pTestString2 = new CCStringTTF(pDef2);
+    pTestString2->setText((char *)pSecondString);
+    
+    this->addChild(pTestString2);
+    pTestString2->setPosition(CCPoint(10.0f, 50.0f));
+    
+    
+    // third label
+    pTestString3 = new CCStringTTF(pDef3);
+    pTestString3->setText((char *)pSecondString);
+    
+    this->addChild(pTestString3);
+    pTestString3->setPosition(CCPoint(10.0f, 225.0f));
+    
+    //fourth label
+    pTestString4 = new CCStringTTF(pDef);
+    pTestString4->setText((char *)pSecondString);
+    
+    this->addChild(pTestString4);
+    pTestString4->setPosition(CCPoint(10.0f, 350.0f));
+    */
+    
+    
+    
 }
 
 DynamicTTFDemo::~DynamicTTFDemo()
