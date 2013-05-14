@@ -45,7 +45,7 @@
 
 #include "js_bindings_config.h"
 
-
+#define BYTE_CODE_FILE_EXT ".jsc"
 
 pthread_t debugThread;
 string inData;
@@ -301,8 +301,8 @@ void registerDefaultClasses(JSContext* cx, JSObject* global) {
     JS_DefineFunction(cx, global, "__restartVM", JSB_core_restartVM, 0, JSPROP_READONLY | JSPROP_PERMANENT | JSPROP_ENUMERATE );
 }
 
-void sc_finalize(JSFreeOp *freeOp, JSObject *obj) {
-    return;
+static void sc_finalize(JSFreeOp *freeOp, JSObject *obj) {
+    CCLOGINFO("jsbindings: finalizing JS object %p (global class)", obj);
 }
 
 static JSClass global_class = {
@@ -354,7 +354,6 @@ void ScriptingCore::string_report(jsval val) {
 
 JSBool ScriptingCore::evalString(const char *string, jsval *outVal, const char *filename, JSContext* cx, JSObject* global)
 {
-    jsval rval;
     if (cx == NULL)
         cx = cx_;
     if (global == NULL)
@@ -363,13 +362,13 @@ JSBool ScriptingCore::evalString(const char *string, jsval *outVal, const char *
     if (script) {
         // JSAutoCompartment ac(cx, global);
         JSAutoCompartment ac(cx, global);
-        JSBool evaluatedOK = JS_ExecuteScript(cx, global, script, &rval);
+        JSBool evaluatedOK = JS_ExecuteScript(cx, global, script, outVal);
         if (JS_FALSE == evaluatedOK) {
             fprintf(stderr, "(evaluatedOK == JS_FALSE)\n");
         }
         return evaluatedOK;
     }
-    return false;
+    return JS_FALSE;
 }
 
 void ScriptingCore::start() {
@@ -396,6 +395,20 @@ void ScriptingCore::removeAllRoots(JSContext *cx) {
     HASH_CLEAR(hh, _native_js_global_ht);
 }
 
+static JSPrincipals shellTrustedPrincipals = { 1 };
+
+static JSBool
+CheckObjectAccess(JSContext *cx, js::HandleObject obj, js::HandleId id, JSAccessMode mode,
+                  js::MutableHandleValue vp)
+{
+    return JS_TRUE;
+}
+
+static JSSecurityCallbacks securityCallbacks = {
+    CheckObjectAccess,
+    NULL
+};
+
 void ScriptingCore::createGlobalContext() {
     if (this->cx_ && this->rt_) {
         ScriptingCore::removeAllRoots(this->cx_);
@@ -404,9 +417,16 @@ void ScriptingCore::createGlobalContext() {
         this->cx_ = NULL;
         this->rt_ = NULL;
     }
+    // Removed from Spidermonkey 19.
     //JS_SetCStringsAreUTF8();
-    this->rt_ = JS_NewRuntime(10 * 1024 * 1024, JS_NO_HELPER_THREADS);
-    this->cx_ = JS_NewContext(rt_, 10240);
+    this->rt_ = JS_NewRuntime(8L * 1024L * 1024L, JS_USE_HELPER_THREADS);
+    JS_SetGCParameter(rt_, JSGC_MAX_BYTES, 0xffffffff);
+	
+    JS_SetTrustedPrincipals(rt_, &shellTrustedPrincipals);
+    JS_SetSecurityCallbacks(rt_, &securityCallbacks);
+	JS_SetNativeStackQuota(rt_, JSB_MAX_STACK_QUOTA);
+    
+    this->cx_ = JS_NewContext(rt_, 8192);
     JS_SetOptions(this->cx_, JSOPTION_TYPE_INFERENCE);
     JS_SetVersion(this->cx_, JSVERSION_LATEST);
     JS_SetOptions(this->cx_, JS_GetOptions(this->cx_) & ~JSOPTION_METHODJIT);
@@ -425,45 +445,57 @@ void ScriptingCore::createGlobalContext() {
     }
 }
 
+static std::string RemoveFileExt(const std::string& filePath) {
+    size_t pos = filePath.rfind('.');
+    if (0 < pos) {
+        return filePath.substr(0, pos);
+    }
+    else {
+        return filePath;
+    }
+}
+
 JSBool ScriptingCore::runScript(const char *path, JSObject* global, JSContext* cx)
 {
     if (!path) {
         return false;
     }
     cocos2d::CCFileUtils *futil = cocos2d::CCFileUtils::sharedFileUtils();
-    std::string rpath;
-    if (path[0] == '/') {
-        rpath = path;
-    } else {
-        rpath = futil->fullPathForFilename(path);
-    }
+    std::string fullPath = futil->fullPathForFilename(path);
     if (global == NULL) {
         global = global_;
     }
     if (cx == NULL) {
         cx = cx_;
     }
-
+    JSScript *script = NULL;    
     js::RootedObject obj(cx, global);
 	JS::CompileOptions options(cx);
-	options.setUTF8(true).setFileAndLine(rpath.c_str(), 1);
+	options.setUTF8(true).setFileAndLine(fullPath.c_str(), 1);
     
-    // this will always compile the script, we can actually check if the script
-    // was compiled before, because it can be in the global map
+    // a) check js file first
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    unsigned char *content = NULL;
-    unsigned long contentSize = 0;
-
-    content = (unsigned char*)CCString::createWithContentsOfFile(rpath.c_str())->getCString();
-    contentSize = strlen((char*)content);
-    // Not supported in SpiderMonkey 19.0
-    //JSScript* script = JS_CompileScript(cx, global, (char*)content, contentSize, path, 1);
-    JSScript *script = JS::Compile(cx, obj, options, (char*)content, contentSize);
+    CCString* content = CCString::createWithContentsOfFile(path);
+    if (content) {
+        // Not supported in SpiderMonkey 19.0
+        //JSScript* script = JS_CompileScript(cx, global, (char*)content, contentSize, path, 1);
+        const char* contentCStr = content->getCString();
+        script = JS::Compile(cx, obj, options, contentCStr, strlen(contentCStr));
+    }
 #else
-    // Removed in SpiderMonkey 19.0
-    //JSScript* script = JS_CompileUTF8File(cx, global, rpath.c_str());
-	JSScript *script = JS::Compile(cx, obj, options, rpath.c_str());
+    script = JS::Compile(cx, obj, options, fullPath.c_str());
 #endif
+    // b) no js file, check jsc file
+    if (!script) {
+        std::string byteCodePath = RemoveFileExt(std::string(path)) + BYTE_CODE_FILE_EXT;
+        unsigned long length = 0;
+        void *data = futil->getFileData(byteCodePath.c_str(),
+                                        "rb",
+                                        &length);
+        if (data) {
+            script = JS_DecodeScript(cx, data, length, NULL, NULL);
+        }
+    }
     JSBool evaluatedOK = false;
     if (script) {
         jsval rval;
@@ -608,6 +640,7 @@ JSBool ScriptingCore::dumpRoot(JSContext *cx, uint32_t argc, jsval *vp)
 //    JSContext *_cx = ScriptingCore::getInstance()->getGlobalContext();
 //    JSRuntime *rt = JS_GetRuntime(_cx);
 //    JS_DumpNamedRoots(rt, dumpNamedRoot, NULL);
+//    JS_DumpHeap(rt, stdout, NULL, JSTRACE_OBJECT, NULL, 2, NULL);
 #endif
     return JS_TRUE;
 }
